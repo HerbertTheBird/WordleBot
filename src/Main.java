@@ -27,7 +27,7 @@ public class Main {
 		for(int i = 0; i < answers.length; i++) remaining[i] = i;
 		start = System.currentTimeMillis();
 		Pair[] a = go(remaining, 0.2, 15, 6);
-		createAnswerFile();
+//		createAnswerFile();
 		System.out.println("search takes " + (System.currentTimeMillis()-start) + " ms");
 		for(int i = 0; i < a.length; i++) {
 			System.out.println(guesses[a[i].s] + " " + a[i].d);
