@@ -26,8 +26,9 @@ public class Main {
 		int[] remaining = new int[answers.length];
 		for(int i = 0; i < answers.length; i++) remaining[i] = i;
 		start = System.currentTimeMillis();
-		Pair[] a = go(remaining, 0.2, 15, 6);
-//		createAnswerFile();
+//		Pair[] a = go(remaining, 0.7, 40, 6); //for solve
+		Pair[] a = go(remaining, 0.2, 15, 6); //for play
+		createAnswerFile();
 		System.out.println("search takes " + (System.currentTimeMillis()-start) + " ms");
 		for(int i = 0; i < a.length; i++) {
 			System.out.println(guesses[a[i].s] + " " + a[i].d);
@@ -159,6 +160,9 @@ public class Main {
         for (int i = 0; i < tSz; i++) {
             int c = bucket[touched[i]];
             sum += c * LOG2[c];
+            if(touched[i] == sz-1) {
+            	sum -= 0.00001;
+            }
         }
         double H = LOG2[R] - sum / R;
 		for (int i = 0; i < tSz; i++) bucket[touched[i]] = 0;
@@ -210,7 +214,6 @@ public class Main {
 			System.out.println("approximation");
 			return out;
 		}
-		
 		
 		Arrays.parallelSetAll(out, t -> {
 		    Pair p = out[t];
