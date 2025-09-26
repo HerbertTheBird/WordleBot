@@ -27,8 +27,9 @@ public class Main {
 		for(int i = 0; i < answers.length; i++) remaining[i] = i;
 //		solve();
 		Scanner in = new Scanner(System.in);
-		System.out.println(guesses[solutions.get(new StateKey(remaining))]);
-		int prevBest = 10183;
+		int prevBest = solutions.get(new StateKey(remaining));
+
+		System.out.println(guesses[prevBest]);
 		while(remaining.length > 1) {
 			int idx = -1;
 			do {
@@ -72,7 +73,8 @@ public class Main {
 				}
 			}
 			remaining = newrem;
-			System.out.println(guesses[solutions.get(new StateKey(remaining))]);
+			prevBest = solutions.get(new StateKey(remaining));
+			System.out.println(guesses[prevBest]);
 		}
 		
 	}
@@ -124,6 +126,7 @@ public class Main {
 		in2.close();
 	}
 	public static void createHashMapFile() throws Exception{
+	
 		FileWriter writer = new FileWriter("solutionhm.txt");
 		for(Map.Entry<StateKey, Integer> i:solutions.entrySet()) {
 			writer.write(i.getKey().a.length + " ");
@@ -133,6 +136,8 @@ public class Main {
 			writer.write(" " + i.getValue() + "\n");
 		}
 		writer.close();
+
+		System.out.println("done");
 	}
 	public static void createAnswerFile() throws Exception{
 		FileWriter writer = new FileWriter("solution.txt");
