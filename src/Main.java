@@ -25,15 +25,9 @@ public class Main {
 		System.out.println("setup takes " + (System.currentTimeMillis()-start) + " ms");
 		int[] remaining = new int[answers.length];
 		for(int i = 0; i < answers.length; i++) remaining[i] = i;
-		start = System.currentTimeMillis();
-//		Pair[] a = go(remaining, 0.7, 40, 6); //for solve
-		Pair[] a = go(remaining, 0.2, 15, 6); //for play
-		createAnswerFile();
-		System.out.println("search takes " + (System.currentTimeMillis()-start) + " ms");
-		for(int i = 0; i < a.length; i++) {
-			System.out.println(guesses[a[i].s] + " " + a[i].d);
-		}
+//		solve();
 		Scanner in = new Scanner(System.in);
+		System.out.println(guesses[solutions.get(new StateKey(remaining))]);
 		int prevBest = 10183;
 		while(remaining.length > 1) {
 			int idx = -1;
@@ -78,15 +72,21 @@ public class Main {
 				}
 			}
 			remaining = newrem;
-			System.out.println(newrem.length);
-
-			Pair[] ans = go(remaining, 1, 50, 6);
-			prevBest = ans[0].s;
-			for(int i = 0; i < ans.length && i < 10; i++) {
-				System.out.println(guesses[ans[i].s] + " " + ans[i].d);
-			}
+			System.out.println(guesses[solutions.get(new StateKey(remaining))]);
 		}
 		
+	}
+	public static void solve() throws Exception{
+		int[] remaining = new int[answers.length];
+		for(int i = 0; i < answers.length; i++) remaining[i] = i;
+		long start = System.currentTimeMillis();
+		Pair[] a = go(remaining, 0.7, 32, 6); //solve - 30 seconds
+		createHashMapFile();
+		createAnswerFile();
+		System.out.println("search takes " + (System.currentTimeMillis()-start) + " ms");
+		for(int i = 0; i < a.length; i++) {
+			System.out.println(guesses[a[i].s] + " " + a[i].d);
+		}
 	}
 	public static void setup() throws Exception{
 		pow3[0] = 1;
@@ -108,6 +108,31 @@ public class Main {
 			}
 		}
 		in.close();
+		BufferedReader in2 = new BufferedReader(new FileReader("solutionhm.txt"));
+		String line;
+		StringTokenizer st;
+		while((line = in2.readLine()) != null) {
+			st = new StringTokenizer(line);
+			int n = Integer.parseInt(st.nextToken());
+			int[] a = new int[n];
+			for(int i = 0; i < n; i++) {
+				a[i] = Integer.parseInt(st.nextToken());
+			}
+			int word = Integer.parseInt(st.nextToken());
+			solutions.put(new StateKey(a), word);
+		}
+		in2.close();
+	}
+	public static void createHashMapFile() throws Exception{
+		FileWriter writer = new FileWriter("solutionhm.txt");
+		for(Map.Entry<StateKey, Integer> i:solutions.entrySet()) {
+			writer.write(i.getKey().a.length + " ");
+			for(int j = 0; j < i.getKey().a.length; j++) {
+				writer.write(i.getKey().a[j] + " ");
+			}
+			writer.write(" " + i.getValue() + "\n");
+		}
+		writer.close();
 	}
 	public static void createAnswerFile() throws Exception{
 		FileWriter writer = new FileWriter("solution.txt");
